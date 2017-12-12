@@ -64,7 +64,7 @@
       var pageEl = document.getElementById('sti-page')
       var loadingFn = function () {
         loadingEl.innerText = loading[loadingIdx++ % loading.length]
-        var height = parseFloat(pageEl.style.height) - Math.random()
+        var height = Math.max(parseFloat(pageEl.style.height) - Math.random(), 0)
         pageEl.style.height = height + '%'
         setTimeout(loadingFn, 1000)
       }
