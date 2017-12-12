@@ -1,7 +1,7 @@
 (function () {
   console.log('loading...');
   _bftn_options = {
-    iframe_path: '/saveme.html'
+    iframe_path: 'saveme.html'
   };
 
   var _bftn_util = {
