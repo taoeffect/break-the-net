@@ -8,22 +8,16 @@
         margin: 0; padding: 0;
         overflow: hidden;
         position: absolute;
-        bottom: 0 !important;
-        z-index: 9999;
+        top: 0px;
+        z-index: 999999999;
       }
       #kti-page {
         background-color: white;
-        overflow: hidden;
-        position: absolute;
-        top: 0;
-        height: 100%;
-        width: 100%;
-        z-index: -9999;
       }
       .kti-body {
         margin: 0 auto;
         max-width: 600px;
-        padding: 20px 5px 10px 5px;
+        padding: 20px 10px 10px 10px;
         bottom: 0;
         height: 100%;
         font-family: courier;
@@ -41,7 +35,7 @@
     </style>
   </head>
   <body>
-    <div id="kti-overlay" style="height: 100%;">
+    <div id="kti-overlay">
       <div id="kti-page">
         <div class="kti-body">
           <p class="kti-loading">Loading website</p><span class="kti-loading-dots"></span>
@@ -78,33 +72,33 @@
     </div>
   </body>
   <script>
-    (function () {
-      var loadingEls = document.getElementsByClassName('kti-loading-dots')
-      var overlayEl = document.getElementById('kti-overlay')
-      var pageEl = document.getElementById('kti-page')
-      var loading = ['.', '..', '...']
-      var loadingIdx = 0
-      var winFrac = 100.0
-      function fixPageEl () {
-        var diff = window.innerHeight - overlayEl.clientHeight
-        pageEl.style.top = -diff
-        // also works:
-        // pageEl.style.marginTop = -diff
-        pageEl.style.height = window.innerHeight + 'px'
+  (function () {
+    var loadingEls = document.getElementsByClassName('kti-loading-dots')
+    var overlayEl = document.getElementById('kti-overlay')
+    var pageEl = document.getElementById('kti-page')
+    var loading = ['.', '..', '...']
+    var loadingIdx = 0
+    var baseHeight = overlayEl.scrollHeight
+    var moveBy = 0
+    function move () {
+      moveBy += parseInt(Math.random() * 3)
+      var height = Math.max(baseHeight, window.innerHeight)
+      if (moveBy > height) moveBy = height
+      overlayEl.style.top = moveBy + 'px'
+      pageEl.style.marginTop = -moveBy + 'px'
+      pageEl.style.height = (height + moveBy) + 'px'
+      overlayEl.style.height = (height - moveBy) + 'px'
+    }
+    window.onresize = move
+    var loadingFn = function () {
+      var dots = loading[loadingIdx++ % loading.length]
+      for (var loadingEl of loadingEls) {
+        loadingEl.innerText = dots
       }
-      window.onresize = fixPageEl
-      var loadingFn = function () {
-        var dots = loading[loadingIdx++ % loading.length]
-        for (var loadingEl of loadingEls) {
-          loadingEl.innerText = dots
-        }
-        winFrac -= Math.random() * 0.5
-        var height = Math.max(parseInt(winFrac / 100.0 * window.innerHeight), 0)
-        overlayEl.style.height = height + 'px'
-        fixPageEl()
-        setTimeout(loadingFn, 1000)
-      }
-      loadingFn()
-    })()
+      move()
+      setTimeout(loadingFn, 1000)
+    }
+    loadingFn()
+  })()
   </script>
 </html>
