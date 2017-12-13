@@ -3,7 +3,7 @@
 Add this to any page you want to break:
 
 ```html
-<script src="https://okturtles.org/widgets/btn/break-the-net.js" charset="utf-8" async></script>
+<script src="https://okturtles.com/widgets/btn/break-the-net.js" charset="utf-8" async></script>
 ```
 
 # Acknowledgements

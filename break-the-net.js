@@ -1,6 +1,6 @@
 // with some inspiration from: https://github.com/fightforthefuture/battleforthenet-widget
 (function () {
-  var iframe_path = 'break-the-net.html'
+  var iframe_path = 'https://okturtles.com/widgets/btn/break-the-net.html'
   function injectCSS (id, css) {
     var style = document.createElement('style');
     style.type = 'text/css';
@@ -22,7 +22,7 @@
     return wrapper;
   }
   function onDomContentLoaded() {
-    injectCSS('_ktn_iframe_css', '#_ktn_wrapper { position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 20000; -webkit-overflow-scrolling: touch; overflow-y: auto; } #_ktn_iframe { width: 100%; height: 100%;  }');
+    injectCSS('_ktn_iframe_css', '#_ktn_wrapper { position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 999999999; -webkit-overflow-scrolling: touch; overflow-y: auto; } #_ktn_iframe { width: 100%; height: 100%;  }');
     createIframe('_ktn_iframe', iframe_path)
   }
   switch(document.readyState) {
