@@ -80,8 +80,8 @@
     var loadingIdx = 0
     var baseHeight = overlayEl.scrollHeight
     var moveBy = 0
+    parent.postMessage(baseHeight, '*')
     function move () {
-      moveBy += parseInt(Math.random() * 3)
       var height = Math.max(baseHeight, window.innerHeight)
       if (moveBy > height) moveBy = height
       overlayEl.style.top = moveBy + 'px'
@@ -95,6 +95,7 @@
       for (var loadingEl of loadingEls) {
         loadingEl.innerText = dots
       }
+      moveBy += parseInt(Math.random() * 5)
       move()
       setTimeout(loadingFn, 1000)
     }

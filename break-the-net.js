@@ -1,4 +1,7 @@
+// with some inspiration from: https://github.com/fightforthefuture/battleforthenet-widget
 (function () {
+  // var iframe_path = 'https://okturtles.com/widgets/btn/break-the-net.html'
+  var iframe_path = window.location.origin === 'file://' ? 'break-the-net.html' : 'https://okturtles.com/widgets/btn/break-the-net.html'
   function injectCSS (id, css) {
     var style = document.createElement('style');
     style.type = 'text/css';
@@ -7,106 +10,33 @@
     else style.appendChild(document.createTextNode(css));
     document.head.appendChild(style);
   }
-  function onDomContentLoaded () {
-    // style
-    var css = 'body { margin: 0; padding: 0; }' +
-    '#kti-overlay {' +
-      'width: 100%;' +
-      'height: 100%;' +
-      'margin: 0; padding: 0;' +
-      'overflow: hidden;' +
-      'position: absolute;' +
-      'top: 0px;' +
-      'z-index: 999999999;' +
-    '}' +
-    '#kti-page {' +
-      'background-color: white;' +
-    '}' +
-    '.kti-body {' +
-      'margin: 0 auto;' +
-      'max-width: 600px;' +
-      'padding: 20px 10px 10px 10px;' +
-      'bottom: 0;' +
-      'height: 100%;' +
-      'font-family: courier;' +
-      'font-size: 110%;' +
-    '}' +
-    '.kti-loading {' +
-      'position: relative;' +
-      'display: inline-block;' +
-      'margin-left: 25%;' +
-      'font-weight: bold;' +
-      'text-align: center;' +
-    '}' +
-    'ul { margin-top: 1.5em; }' +
-    'ul > li { margin-bottom: 1.25em; }';
-    injectCSS('_btn_css', css)
-    // html
-    var html = '<div id="kti-overlay">' +
-      '<div id="kti-page">' +
-        '<div class="kti-body">' +
-          '<p class="kti-loading">Loading website</p><span class="kti-loading-dots"></span>' +
-          '<h3 style="margin-top:40px">Dear Visitor,</h3>' +
-          '<p>' +
-            'America\'s Internet, and <a href="https://blog.united.vote/2017/12/06/net-neutrality-is-a-freedom-of-speech-issue-period/">freedom of speech</a>, are <a href="https://www.battleforthenet.com/breaktheinternet/">under attack by mega-ISPs</a>.' +
-          '</p>' +
-          '<p>This is a <a href="https://twitter.com/arcalinea/status/938912665820209152">fundamental threat</a>.</p>' +
-          '<p>Americans don\'t give up freedom without a fight.</p>' +
-          '<ul>' +
-            '<li>' +
-              '<b><a href="https://twitter.com/vanschewick/status/938824374441992194">Arm</a> <a href="https://twitter.com/taoeffect/status/938899540261744640">yourself</a> <a href="https://lobste.rs/s/dgki9h/net_neutrality_is_freedom_speech_issue#c_70cccr">with</a> <a href="https://twitter.com/taoeffect/status/938916525288726528">knowledge</a>.</b>' +
-            '</li>' +
-            '<li>' +
-              '<b>Break your website.</b>' +
-              '<br><br>' +
-              'It <a href="https://duckduckgo.com/?q=napoleon+russians+scorched+earth">worked for the Russians</a>.' +
-              '<br><br>' +
-              'Use <b><a href="https://github.com/taoeffect/break-the-net">our code</a></b> or <b><a href="https://github.com/fightforthefuture/battleforthenet-widget">theirs</a></b>.' +
-            '</li>' +
-            '<li>' +
-              '<b>Create city/community ISPs!</b>' +
-              '<br><br>' +
-              'How power-crazed are the ISPs?' +
-              '<br><br>This crazy: <a href="https://arstechnica.com/tech-policy/2017/01/virginia-broadband-deployment-act-would-kill-municipal-broadband-deployment/">they\'ve already begun efforts</a> to dictate how your <i>local community</i> chooses to connect to the Internet.' +
-              '<br><br>' +
-              'Force them to compete with a <i>public option</i> — your local city-run or community-run ISP.' +
-              '<br><br>' +
-            '</li>' +
-          '</ul>' +
-          '<p class="kti-loading">Loading website</p><span class="kti-loading-dots"></span>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
+  function createIframe (id, src) {
     var wrapper = document.createElement('div');
-    wrapper.innerHTML = html
-    document.body.appendChild(wrapper)
-    // script
-    var loadingEls = document.getElementsByClassName('kti-loading-dots')
-    var overlayEl = document.getElementById('kti-overlay')
-    var pageEl = document.getElementById('kti-page')
-    var loading = ['.', '..', '...']
-    var loadingIdx = 0
-    var baseHeight = overlayEl.scrollHeight
-    var moveBy = 0
-    function move () {
-      var height = Math.max(baseHeight, window.innerHeight)
-      if (moveBy > height) moveBy = height
-      overlayEl.style.top = moveBy + 'px'
-      pageEl.style.marginTop = -moveBy + 'px'
-      pageEl.style.height = (height + moveBy) + 'px'
-      overlayEl.style.height = (height - moveBy) + 'px'
-    }
-    window.onresize = move
-    var loadingFn = function () {
-      var dots = loading[loadingIdx++ % loading.length]
-      for (var loadingEl of loadingEls) {
-        loadingEl.innerText = dots
-      }
-      moveBy += parseInt(Math.random() * 3)
-      move()
-      setTimeout(loadingFn, 1000)
-    }
-    loadingFn()
+    wrapper.id = '_ktn_wrapper';
+    var iframe = document.createElement('iframe');
+    iframe.id = id;
+    iframe.src = src;
+    iframe.frameBorder = 0;
+    iframe.allowTransparency = true;
+    // iframe.scroll = 'no';
+    wrapper.appendChild(iframe);
+    document.body.appendChild(wrapper);
+    return wrapper;
+  }
+  function onDomContentLoaded() {
+    injectCSS('_ktn_iframe_css', '#_ktn_wrapper { position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 999999999; -webkit-overflow-scrolling: touch; overflow: hidden; } #_ktn_iframe { width: 100%; height: 100%;  }');
+    var wrapper = createIframe('_ktn_iframe', iframe_path)
+    // from: https://davidwalsh.name/window-iframe
+    // Create IE + others compatible event handler
+    var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+    var eventer = window[eventMethod];
+    var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+    // Listen to message from child window
+    eventer(messageEvent,function(e) {
+      // console.log('parent received message!:', e.data)
+      var height = e.data
+      wrapper.style.minHeight = Math.max(window.innerHeight, height) + 'px'
+    }, false)
   }
   switch(document.readyState) {
     case 'complete':
